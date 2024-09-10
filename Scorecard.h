@@ -102,12 +102,12 @@ class Scorecard
 
         vector<Category> m_categories = 
         {
-            Category("Aces", "Any combination", "Sum of dice with the number 1", aces),
-            Category("Twos", "Any combination", "Sum of dice with the number 2", twos),
-            Category("Threes", "Any combination", "Sum of dice with the number 3", threes),
-            Category("Fours", "Any combination", "Sum of dice with the number 4", fours),
-            Category("Fives", "Any combination", "Sum of dice with the number 5", fives),
-            Category("Sixes", "Any combination", "Sum of dice with the number 6", sixes),
+            MultiplesCategory("Aces", "Any combination", "Sum of dice with the number 1", 1),
+            MultiplesCategory("Twos", "Any combination", "Sum of dice with the number 2", 2),
+            MultiplesCategory("Threes", "Any combination", "Sum of dice with the number 3", 3),
+            MultiplesCategory("Fours", "Any combination", "Sum of dice with the number 4", 4),
+            MultiplesCategory("Fives", "Any combination", "Sum of dice with the number 5", 5),
+            MultiplesCategory("Sixes", "Any combination", "Sum of dice with the number 6", 6),
             Category("Three of a Kind", "At least three dice the same", "Sum of all the dice", three_kind),
             Category("Four of a Kind", "At least four dice the same", "Sum of all the dice", four_kind),
             Category("Full House", "Three of one number and two of another", "25", full_house),

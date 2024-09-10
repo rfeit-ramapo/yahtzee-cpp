@@ -33,6 +33,20 @@ class Dice
             return m_diceList;
         }
 
+        // Returns a vector indicating which dice values to reroll to match the parameter.
+        vector<int> RerollToMatch(const vector<int>& target) const
+        {
+            vector<int> rerollValues(6);
+            for (int i = 0; i < m_diceCount.size(); ++i)
+            {
+                rerollValues[i] = max(m_diceCount[i] - target[i], 0);
+            }
+            return rerollValues;
+        }
+
+        // Getters
+        const vector<int>& GetDiceCount() const { return m_diceCount; }
+
         // Constructors
         Dice() {}; // Default
 

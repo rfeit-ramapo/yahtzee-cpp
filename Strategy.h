@@ -1,137 +1,75 @@
+#pragma once
+
 #include <iostream>
-#include <cmath>
-#include "Scorecard.h"
-#include "PossibleRoll.h"
+#include <string>
+#include "Dice.h"
 
 using namespace std;
 
-int nCr(int n, int r) {
-    if (r > n) return 0;
-    if (r == 0 || r == n) return 1;
-    int res = 1;
-    for (int i = 0; i < r; ++i) {
-        res *= (n - i);
-        res /= (i + 1);
-    }
-    return res;
-}
+// Forward declaration required for Category to avoid circular dependencies.
+class Category;
 
 class Strategy
 {
     public:
 
-        // Function to generate all combinations
-        void GenerateCombinations(int faces, int dice, vector<int>& combination, int start) {
-            if (dice == 0) {
-                vector<int> result(faces, 0);
-                for (int num : combination) {
-                    result[num - 1]++; // Increment count for the face (num - 1)
-                }
-                vector<int> scoreValues;
-                for ( Category c : m_scorecard->GetCategories())
-                {
-                    scoreValues.push_back(c.Score(result));
-                }
-                m_possibleRolls.push_back(PossibleRoll(result, scoreValues));
-                return;
-            }
 
-            for (int i = start; i <= faces; ++i) {
-                combination.push_back(i);
-                GenerateCombinations(faces, dice - 1, combination, i);
-                combination.pop_back();
-            }
-        }
 
-        void InitializeStrategy()
-        {
-            int faces = 6;
-            int dice = 5;
-
-            vector<int> combination;
-
-            GenerateCombinations(faces, dice, combination, 1);
-        };
-
-        void Strategize(const vector<int> &diceValues)
-        {
-            double maxWeightedScore = 0;
-            vector<int> targetValues;
-
-            int maxScore = 0;
-            int categoryIndex;
-            auto categories = m_scorecard->GetCategories();
-            for ( int i = 0; i < categories.size(); ++i)
-            {
-                int categoryScore = categories[i].Score(diceValues);
-                if (maxScore < categoryScore)
-                {
-                    maxScore = categoryScore;
-                    categoryIndex = i;
-                }
-            }
-
-            // Current best; this could also be empty if there are no qualifying categories
-            Category category = m_scorecard->GetCategory(categoryIndex);
-            cout << "The current category to go for is " << category.GetName() << endl;
-            cout << "This category will give " << maxScore << " points" << endl;
-
-            // mark values that are needed for this score
-            vector<int> temp_mark = {0, 0, 5, 0, 0, 0};
-
-            // go through possible rolls and eliminate those that do not have min values shown above
-            // if no current score was found, these values will be zero
-            for (PossibleRoll r : m_possibleRolls)
-            { 
-                int update = 1;
-                for (int i = 0; i < temp_mark.size(); i++)
-                {
-                    if (temp_mark[i] > r.GetDiceValues()[i]) 
-                    {
-                        update = 0;
-                        break;
-                    };
-                }
-
-                if (update)
-                {
-                    int newMax = 0;
-                    int newCategory;
-                    for (int i = 0; i < r.GetScoreValues().size(); i++)
-                    {
-                        if (newMax < r.GetScoreValues()[i]) 
-                        {
-                            newMax = r.GetScoreValues()[i];
-                            newCategory = i;
-                        }
-                    }
-                    if (newMax > maxScore) 
-                    {
-                        maxScore = newMax;
-                        categoryIndex = newCategory;
-                    }
-                }
-
-            }
-
-            // if they do have min values required, and the score is greater than current max, set it as the recommended play
-            category = m_scorecard->GetCategory(categoryIndex);
-            cout << "The new category to go for is " << category.GetName() << endl;
-            cout << "This category will give " << maxScore << " points" << endl;
-
-        }
-
-        void PrintRolls()
-        {
-            for (PossibleRoll r : m_possibleRolls) r.print();
-        }
+        // print function goes here
 
         // Constructors
-        Strategy() {}; // Default
+        Strategy() : m_currentScore(0), m_weightedScore(0) {}; // Default
 
-        Strategy(shared_ptr<Scorecard> a_scorecard) : m_scorecard(a_scorecard) {};
+        // Build a strategy, with a type, current score, weighted score, and category.
+        Strategy(string a_type, int a_currentScore, double a_weightedScore, shared_ptr< const Category> a_categoryToPursue) : m_type(a_type), m_currentScore(a_currentScore), m_weightedScore(a_weightedScore),m_categoryToPursue(a_categoryToPursue) {};
+
+        bool operator <(const Strategy& s) { return (m_weightedScore < s.m_weightedScore); }
+        bool operator ==(const Strategy& s) { return (m_weightedScore == s.m_weightedScore); }
+        bool operator >(const Strategy& s) { return (m_weightedScore > s.m_weightedScore); }
+        bool operator <=(const Strategy& s) { return (m_weightedScore <= s.m_weightedScore); }
+        bool operator >=(const Strategy& s) { return (m_weightedScore >= s.m_weightedScore); }
+        bool operator !=(const Strategy& s) { return (m_weightedScore != s.m_weightedScore); }
+    
+    private:
+
+        string m_type; // stand or reroll dice
+        int m_currentScore; // if this category is selected, the value it would give
+        double m_weightedScore; // score given weight based on chances of achieving
+        shared_ptr< const Category> m_categoryToPursue; // the category this strategy is based on
+};
+
+class StandStrategy : public Strategy
+{
+
+    public:
+        // Default
+        StandStrategy() {};
+
+        // 
+        StandStrategy(int a_currentScore, shared_ptr< const Category> a_categoryToPursue)
+            : Strategy("stand", a_currentScore, (double) a_currentScore, a_categoryToPursue) {};
+};
+
+class RerollStrategy : public Strategy
+{
+
+    public:
+        // Default
+        RerollStrategy() {};
+
+        // Reroll all if no counts are specified. Also assumes currentScore is 0.
+        RerollStrategy(double a_weightedScore, shared_ptr< const Category> a_categoryToPursue, shared_ptr< const Dice > a_dice)
+            : Strategy("reroll", 0, a_weightedScore, a_categoryToPursue), m_dice(a_dice), m_rerollCounts(a_dice->GetDiceCount()) {};
+
+        // Constructor that omits current score, as it's assumed to be 0.
+        RerollStrategy(double a_weightedScore, shared_ptr< const Category> a_categoryToPursue, shared_ptr<const Dice> a_dice, vector<int> a_rerollCounts)
+            : Strategy("reroll", 0, a_weightedScore, a_categoryToPursue), m_dice(a_dice), m_rerollCounts(a_rerollCounts) {};
+
+        // Full constructor options
+        RerollStrategy(int a_currentScore, double a_weightedScore, shared_ptr< const Category> a_categoryToPursue, shared_ptr<const Dice> a_dice, vector<int> a_rerollCounts)
+            : Strategy("reroll", a_currentScore, a_weightedScore, a_categoryToPursue), m_dice(a_dice), m_rerollCounts(a_rerollCounts) {};
 
     private:
-        shared_ptr<Scorecard> m_scorecard;
-        vector<PossibleRoll> m_possibleRolls;
+        shared_ptr< const Dice> m_dice; // the set of dice this strategy is for
+        vector<int> m_rerollCounts; // how many dice of each face value to reroll
 };
