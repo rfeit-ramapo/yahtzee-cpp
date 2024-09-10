@@ -15,6 +15,12 @@ class Turn
             cout << m_player->GetLogName() << " rolled    ";
             for (int i : rollResult) cout << " " << i;
             cout << endl;
+
+            // show scorecard (only unfilled)
+            
+            // Set aside
+
+            // Roll remaining dice
         };
     
         // Constructors
