@@ -39,9 +39,23 @@ class Dice
             vector<int> rerollValues(6);
             for (int i = 0; i < m_diceCount.size(); ++i)
             {
+                // Return negative values if this is impossible to achieve
+                if (m_locked[i] > target[i]) return {-1, -1, -1, -1, -1, -1};
                 rerollValues[i] = max(m_diceCount[i] - target[i], 0);
             }
             return rerollValues;
+        }
+
+        // Find unlocked, non-scoring dice
+        // required paramter represents dice that would contribute to the score
+        vector<int> GetUnlockedUnscored(const vector<int>& required) const
+        {
+            vector<int> unlockedUnscored(6);
+            for (int i = 0; i < m_diceCount.size(); ++i)
+            {
+                unlockedUnscored[i] = max(m_diceCount[i] - required[i] - m_locked[i], 0);
+            }
+            return unlockedUnscored;
         }
 
         // Getters

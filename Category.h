@@ -14,7 +14,7 @@ class Category
     public:
 
         // Function to calculate the score for this category
-        virtual int Score(const Dice &a_dice) const {};
+        virtual int Score(const Dice &a_dice) const { return 0; };
 
         // Function to determine how to achieve this category, given current diceset
         virtual Strategy GetRerollStrategy(const Dice &a_dice, int a_numRerolls) const { return Strategy(); };
@@ -63,27 +63,29 @@ class MultiplesCategory : public Category
             // Return a default, 0 score strategy if this category has already been filled.
             if (m_full) return Strategy();
 
-            // If this is the max value for aces already, you should stand.
+            // Get the current score value of the dice set
             int currentScore = Score(*a_dice);
-            int maxScore = (m_multipleIndex + 1) * 5;
-            if (currentScore == maxScore) return StandStrategy(currentScore, shared_from_this());
-            
-            // If this set of dice already scores, the best strategy is to reroll nonmatching dice.
-            if (currentScore)
+
+            // Find all unlocked, non-scoring dice
+            vector<int> perfectScore(6, 0);
+            perfectScore[m_multipleIndex] = 5;
+            vector<int> unlockedUnscored = a_dice->GetUnlockedUnscored(perfectScore);
+            int rerolledDice = accumulate(unlockedUnscored.begin(), unlockedUnscored.end(), 0);
+
+            // Stand if there are no possible dice to reroll
+            if (!rerolledDice && currentScore)
             {
-                vector<int> rerollCounts(6, 0);
-                rerollCounts[m_multipleIndex] = 5;
-                rerollCounts = a_dice->RerollToMatch(rerollCounts);
-
-                // Weigh scores based on how many dice are saved. More rerolls = lower weight.
-                double keptDiceFraction = (double) accumulate(rerollCounts.begin(), rerollCounts.end(), 0) / 5;
-                double weightedScore = (double) maxScore * keptDiceFraction;
-
-                return RerollStrategy(currentScore, weightedScore, shared_from_this(), a_dice, rerollCounts);
-
+                return StandStrategy(currentScore, "you have achieved the maximum points possible in this category, given your dice set.", shared_from_this());
             }
             else
-            return RerollStrategy(0, shared_from_this(), a_dice);
+            {
+                double keptDiceFraction = (double) (5 - rerolledDice) / 5;
+                int maxScoreDiff = (m_multipleIndex + 1) * rerolledDice;
+                double weightedScore = currentScore + ((double) maxScoreDiff * keptDiceFraction);
+
+                string reasoning = "you can potentially achieve " + to_string(maxScoreDiff + currentScore) + " points in this category by rerolling these dice.";
+                return RerollStrategy(currentScore, weightedScore, reasoning, shared_from_this(), a_dice, unlockedUnscored);
+            }
         };
 
         // Constructors
@@ -94,6 +96,81 @@ class MultiplesCategory : public Category
 
         private:
             int m_multipleIndex;
+};
+
+class KindCategory : public Category
+{
+    public:
+
+        // Function to calculate the score for this category
+        int Score(const Dice& a_dice) const 
+        {
+            const vector<int> &diceValues = a_dice.GetDiceCount();
+            bool condition_met = false;
+            int score = 0;
+            for (int i = 0; i < diceValues.size(); ++i)
+            {
+                score += diceValues[i] * i;
+                if (diceValues[i] >= m_numKind) condition_met = true;
+            }
+            return score * condition_met;
+        }
+
+        // Function to determine how to achieve this category, given current diceset
+        Strategy GetRerollStrategy(shared_ptr<const Dice> a_dice, int a_numRerolls) const
+        {
+            // Get the current score value of the dice set
+            int currentScore = Score(*a_dice);
+
+            const vector<int> &diceValues = a_dice->GetDiceCount();
+
+            int maxFace = 0;
+            int maxDice = 0;
+            vector<int> toReroll;
+            int rerolledDice;
+            // for (int i = 5; i >= 0; --i)
+            for (int i = 0; i < diceValues.size(); ++i)
+            {
+                int myFace = i + 1;
+                int myDice = diceValues[i];
+
+                if (myDice >= maxDice) 
+                {
+                    vector<int> minimumScore(6, 0);
+                    minimumScore[i] = m_numKind;
+                    vector<int> rerollable = a_dice->GetUnlockedUnscored(minimumScore);
+                    int rerollableTotal = accumulate(rerollable.begin(), rerollable.end(), 0);
+
+                    if ((myDice + rerollableTotal) < m_numKind) continue;
+
+                    myFace = maxFace;
+                    maxDice = myDice;
+                    toReroll = rerollable;
+                    rerolledDice = rerollableTotal;
+                }
+            }
+
+            // If maxFace is 0, this means it is impossible to get this category
+            if (!maxFace) return Strategy();
+
+            double keptDiceFraction = (double) (5 - rerolledDice) / 5;
+            int maxScore = (maxFace * m_numKind) + (6 * (5 - m_numKind));
+            int maxScoreDiff = maxScore - currentScore;
+            double weightedScore = currentScore + ((double) maxScoreDiff * keptDiceFraction);
+
+            string reasoning = "you can potentially achieve " + to_string(maxScore) + " points in this category by rerolling these dice.";
+            return RerollStrategy(currentScore, weightedScore, reasoning, shared_from_this(), a_dice, toReroll);
+        }
+
+
+        // Constructors
+        KindCategory(string a_name, string a_description, string a_score, int a_numKind): Category(a_name, a_description, a_score), m_numKind(a_numKind) {};
+
+        KindCategory(string a_name, string a_description, string a_score, string a_winner, int a_points, int a_round, int a_numKind) : Category(a_name, a_description, a_score, a_winner, a_points, a_round), m_numKind(a_numKind)
+        {};
+        
+    private:
+        int m_numKind;
 };
 
 class StraightCategory : public Category
@@ -110,24 +187,24 @@ class StraightCategory : public Category
                 if (diceValues[i] >= 1) streak++;
                 else streak = 0;
             }
-            if (streak >= m_numRepeats) return m_scoreValue;
+            if (streak >= m_streakNum) return m_scoreValue;
             else return 0;
         }
 
         // Function to determine how to achieve this category, given current diceset
         Strategy GetRerollStrategy(shared_ptr<const Dice> a_dice, int a_numRerolls) const
         {
-
+            return Strategy();
         }
 
 
         // Constructors
-        StraightCategory(string a_name, string a_description, string a_score, int a_numRepeats, int a_scoreValue): Category(a_name, a_description, a_score), m_numRepeats(a_numRepeats), m_scoreValue(a_scoreValue) {};
+        StraightCategory(string a_name, string a_description, string a_score, int a_streakNum, int a_scoreValue): Category(a_name, a_description, a_score), m_streakNum(a_streakNum), m_scoreValue(a_scoreValue) {};
 
-        StraightCategory(string a_name, string a_description, string a_score, string a_winner, int a_points, int a_round, int a_numRepeats, int a_scoreValue) : Category(a_name, a_description, a_score, a_winner, a_points, a_round), m_numRepeats(a_numRepeats), m_scoreValue(a_scoreValue)
+        StraightCategory(string a_name, string a_description, string a_score, string a_winner, int a_points, int a_round, int a_streakNum, int a_scoreValue) : Category(a_name, a_description, a_score, a_winner, a_points, a_round), m_streakNum(a_streakNum), m_scoreValue(a_scoreValue)
         {};
         
     private:
-        int m_numRepeats;
+        int m_streakNum;
         int m_scoreValue;
 };
