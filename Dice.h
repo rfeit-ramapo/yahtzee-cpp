@@ -53,16 +53,22 @@ class Dice
             vector<int> unlockedUnscored(6);
             for (int i = 0; i < m_diceCount.size(); ++i)
             {
-                unlockedUnscored[i] = max(m_diceCount[i] - required[i] - m_locked[i], 0);
+                unlockedUnscored[i] = max(m_diceCount[i] - max(required[i], m_locked[i]), 0);
             }
             return unlockedUnscored;
         }
+
+        const vector<int> GetLockedDice() const { return m_locked; }
 
         // Getters
         const vector<int>& GetDiceCount() const { return m_diceCount; }
 
         // Constructors
         Dice() {}; // Default
+
+        Dice(vector<int> a_diceCount) : m_diceCount(a_diceCount) {};
+
+        Dice(vector<int> a_diceCount, vector<int> a_locked) : m_diceCount(a_diceCount), m_locked(a_locked) {};
 
     private:
         int GenerateDieValue()

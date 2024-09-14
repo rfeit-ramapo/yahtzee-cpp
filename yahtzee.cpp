@@ -1,20 +1,24 @@
 #include <iostream>
 #include "Tournament.h"
-#include "Strategy.h"
+#include "StrategyEngine.h"
 
 using namespace std;
 
 int main()
 {
-    Tournament test = Tournament();
+    // Tournament test = Tournament();
 
-    test.Play();
+    // test.Play();
 
-    //Strategy strat = Strategy(make_shared<Scorecard>());
-    //strat.InitializeStrategy();
-    //strat.PrintRolls();
+    StrategyEngine stratTester = StrategyEngine(make_shared<Scorecard>());
 
-    //strat.Strategize({2,1,2,0,0,0});
+    stratTester.FillCategory(5);
+    stratTester.FillCategory(6);
+    stratTester.FillCategory(7);
+    stratTester.FillCategory(8);
+    stratTester.FillCategory(11);
+    shared_ptr<Dice> dice = make_shared<Dice>(Dice({5, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 0, 0}));
+    stratTester.Strategize(dice);
 
 
 }
