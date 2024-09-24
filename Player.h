@@ -11,13 +11,12 @@ class Player
     public:
 
         // Functions
-        virtual int RollOne(Dice &dice) {};
-        virtual vector<int> RollSome(Dice &dice) {};
-        virtual vector<int> RollAll(Dice &dice) {};
-        virtual vector<int> ListAvailableCategories(const StrategyEngine& a_strat, shared_ptr<const Dice> a_dice) {};
-        virtual void PursueCategories(const StrategyEngine& a_strat, const vector<int>& a_availableCategories, shared_ptr<const Dice> a_dice) {};
-        virtual bool HandleRerolls(shared_ptr<Dice> a_dice) {};
-        virtual void ChooseCategory(shared_ptr<Scorecard> a_scorecard, int a_round, const StrategyEngine& a_strat, const vector<int>& a_availableCategories, shared_ptr<const Dice> a_dice) {}; 
+        virtual int RollOne(Dice &dice) = 0;
+        virtual vector<int> RollAll(Dice &dice) = 0;
+        virtual vector<int> ListAvailableCategories(const StrategyEngine& a_strat, shared_ptr<const Dice> a_dice) = 0;
+        virtual void PursueCategories(const StrategyEngine& a_strat, const vector<int>& a_availableCategories, shared_ptr<const Dice> a_dice) = 0;
+        virtual bool HandleRerolls(shared_ptr<Dice> a_dice) = 0;
+        virtual void ChooseCategory(shared_ptr<Scorecard> a_scorecard, int a_round, const StrategyEngine& a_strat, const vector<int>& a_availableCategories, shared_ptr<const Dice> a_dice) = 0; 
 
         // Constructors
         Player() {}; // Default

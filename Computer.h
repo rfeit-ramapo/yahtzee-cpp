@@ -10,9 +10,6 @@ class Computer : public Player
 
         int RollOne(Dice &dice) { return dice.RollOne(); }
 
-        // Todo
-        vector<int> RollSome(Dice &dice) {};
-
         vector<int> RollAll(Dice &dice) { return dice.RollAll(); };
 
         vector<int> ListAvailableCategories(const StrategyEngine& a_strat, shared_ptr<const Dice> a_dice)

@@ -11,17 +11,6 @@ class Dice
 
         int RollOne() { return GenerateDieValue(); }
 
-        vector<int> RollSome(vector<int> a_indices)
-        {
-            for (int i : a_indices) 
-            {
-                m_diceCount[(m_diceList[i] - 1)] -= 1;
-                m_diceList[i] = GenerateDieValue();
-                m_diceCount[(m_diceList[i] - 1)] += 1;
-            }
-            return m_diceList;
-        }
-
         // Lock all dice except those specified to reroll.
         void LockDice(vector<int> a_keptDice)
         {

@@ -16,9 +16,6 @@ class Human : public Player
             return dice.RollOne();
         };
 
-        // Todo
-        vector<int> RollSome(Dice &dice) {};
-
         vector<int> RollAll(Dice &dice) 
         {
             cout << "Press Enter to roll the dice." << endl;

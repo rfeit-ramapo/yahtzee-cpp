@@ -107,6 +107,8 @@ class Scorecard
                     return i;
                 }
             }
+
+            return -1;
         }
 
         inline bool IsFull() const
