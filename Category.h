@@ -52,8 +52,8 @@ class Category
         string m_description;
         string m_score;
         string m_winner;
-        int m_points;
-        int m_round;
+        int m_points = 0;
+        int m_round = 0;
 };
 
 // Class for Aces, Twos, Threes, Fours, Fives, and Sixes

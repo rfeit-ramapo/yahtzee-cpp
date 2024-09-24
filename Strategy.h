@@ -2,6 +2,8 @@
 
 #include <iostream>
 #include <string>
+#include <memory>
+#include <numeric>
 #include "Dice.h"
 
 using namespace std;
