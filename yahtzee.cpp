@@ -6,10 +6,11 @@ using namespace std;
 
 int main()
 {
-    // Tournament test = Tournament();
+    Tournament test = Tournament();
 
-    // test.Play();
+    test.Play();
 
+    /*
     StrategyEngine stratTester = StrategyEngine(make_shared<Scorecard>());
 
     stratTester.FillCategory(5);
@@ -19,6 +20,7 @@ int main()
     stratTester.FillCategory(11);
     shared_ptr<Dice> dice = make_shared<Dice>(Dice({5, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 0, 0}));
     stratTester.Strategize(dice);
+    */
 
 
 }

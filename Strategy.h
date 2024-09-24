@@ -6,31 +6,56 @@
 
 using namespace std;
 
-// Forward declaration required for Category to avoid circular dependencies.
+// Forward declaration required to avoid circular dependencies.
 class Category;
+class Scorecard;
 
 class Strategy
 {
     public:
 
+        inline bool PlanToStand() const { return (m_maxScore == m_currentScore); }
 
-
-        // print function goes here
-        void Print()
+        void Print(bool suggest) const
         {
             if (m_maxScore == 0)
             {
-                cout << "I recommend that you stand because there are no fillable categories given your current dice set." << endl;
+                if (suggest) 
+                {
+                    cout << "I recommend that you stand because there are no fillable categories given your current dice set." << endl;
+                }
+                else 
+                {
+                    cout << "The computer plans to stand because there are no fillable categories given its current dice set." << endl;
+                }
             }
             else if (m_currentScore == m_maxScore)
             {
-                cout << "I recommend that you try for the " << m_categoryName << " category with your current dice set because it gives the maximum possible points (" << m_maxScore << ") among all the options." << endl;
+                if (suggest)
+                {
+                    cout << "I recommend that you try for the " << m_categoryName << " category with your current dice set because it gives the maximum possible points (" << m_maxScore << ") among all the options." << endl;
+                }
+                else
+                {
+                    cout << "The computer plans to stand and try for the " << m_categoryName << " category with its current dice set because it gives the maximum possible points (" << m_maxScore << ") among all the options." << endl;
+                }
+                
             }
             else
             {
-                cout << "I recommend that you try for the " << m_categoryName << " category with " << PrintTargetDice() << " because it gives the maximum possible points (" << m_maxScore << ") among all the options." << endl;
+                if (suggest)
+                {
+                    cout << "I recommend that you try for the " << m_categoryName << " category with " << PrintTargetDice() << " because it gives the maximum possible points (" << m_maxScore << ") among all the options." << endl;
+                }
+                else
+                {
+                    cout << "The computer plans to reroll to try for the " << m_categoryName << " category with " << PrintTargetDice() << " because it gives the maximum possible points (" << m_maxScore << ") among all the options." << endl;
+                }
+                
             }
         };
+
+        void Enact(Scorecard& a_scorecard, int a_round);
 
         // Constructors
         Strategy() : m_currentScore(0), m_maxScore(0) {}; // Default
@@ -39,6 +64,11 @@ class Strategy
         Strategy(int a_currentScore, int a_maxScore, const string a_categoryName) : m_currentScore(a_currentScore), m_maxScore(a_maxScore), m_categoryName(a_categoryName) {};
 
         Strategy(int a_currentScore, int a_maxScore, const string a_categoryName, shared_ptr<const Dice> a_dice, vector<int> a_targetDice, vector<int> a_rerollCounts) : m_currentScore(a_currentScore), m_maxScore(a_maxScore), m_categoryName(a_categoryName), m_dice(a_dice), m_targetDice(a_targetDice), m_rerollCounts(a_rerollCounts) {};
+
+        // Getters
+        inline int GetMaxScore() const { return m_maxScore; }
+        inline int GetCurrentScore() const { return m_currentScore; }
+        inline vector<int> GetRerollDice() const { return m_rerollCounts; }
 
         bool operator <(const Strategy& s) const { return (m_maxScore < s.m_maxScore); }
         bool operator ==(const Strategy& s) const { return (m_maxScore == s.m_maxScore); }
@@ -49,7 +79,7 @@ class Strategy
     
     private:
 
-        string PrintTargetDice()
+        string PrintTargetDice() const
         {
             string fullString = "";
 
@@ -110,7 +140,7 @@ class Strategy
         };
 
         int m_currentScore; // if this category is selected, the value it would give
-        double m_maxScore; // maximum score possible for this category, given the diceset
+        int m_maxScore; // maximum score possible for this category, given the diceset
         string m_categoryName; // the category this strategy is based on
 
         shared_ptr< const Dice> m_dice; // the set of dice this strategy is for

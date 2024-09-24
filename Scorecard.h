@@ -2,6 +2,7 @@
 
 #include <string>
 #include <vector>
+#include <iomanip>
 #include "Category.h"
 
 using namespace std;
@@ -10,10 +11,13 @@ class Scorecard
 {
     public:
 
+        // for temporary testing purposes
         void FillCategory(int a_categoryIndex)
         {
             shared_ptr<Category> category = m_categories[a_categoryIndex];
             category->SetFull();
+
+            m_numFilled++;
         };
 
         void FillCategory(int a_categoryIndex, int a_points, int a_round, string a_winner)
@@ -23,23 +27,96 @@ class Scorecard
             category->SetPoints(a_points);
             category->SetRound(a_round);
             category->SetWinner(a_winner);
+
+            m_numFilled++;
         };
+
+        // print a basic scorecard, with just the number and category name
+        void PrintBasic() const
+        {
+            cout << "Basic Scorecard:" << endl;
+            for (int i = 0; i < m_categories.size(); ++i)
+            {
+                cout << setw(4) << left << (i + 1) << setw(16) << left << m_categories[i]->GetName() << endl;
+            }
+            cout << endl;
+        }
+
+        void Print() const
+        {
+            cout << "Current Scorecard:" << endl;
+
+            // Print the header
+            cout 
+                << setw(7) << left << "Index"
+                << setw(17) << left << "Category" 
+                << setw(40) << left << "Description"
+                << setw(33) << left << "Score"
+                << setw(10) << left << "Winner"
+                << setw(8) << left << "Points"
+                << setw(5) << left << "Round";
+
+            cout << endl << "========================================================================================================================" << endl;
+                
+            for (int i = 0; i < m_categories.size(); ++i)
+            {
+                cout 
+                    << setw(7) << left << (i + 1)
+                    << setw(17) << left << m_categories[i]->GetName() 
+                    << setw(40) << left << m_categories[i]->GetDescription() 
+                    << setw(33) << left << m_categories[i]->GetScore();
+                    
+                if (!m_categories[i]->GetWinner().empty())
+                {
+                    cout << setw(10) << left << m_categories[i]->GetWinner();
+                }
+                if (!(m_categories[i]->GetPoints() == 0))
+                {
+                    cout << setw(8) << left << m_categories[i]->GetPoints();
+                }
+                if (!(m_categories[i]->GetRound() == 0))
+                {
+                    cout << setw(5) << left << m_categories[i]->GetRound();
+                }
+
+                cout << endl;
+            }
+            cout << endl;
+        }
 
         // Constructors
         Scorecard() {}; // Default
 
         // Getters
-        const vector<shared_ptr<Category>>& GetCategories() const
+        inline const vector<shared_ptr<Category>>& GetCategories() const
         {
             return m_categories;
         }
 
-        shared_ptr<const Category> GetCategory(int a_index) const
+        inline shared_ptr<const Category> GetCategory(int a_index) const
         {
             return m_categories[a_index];
         }
+        
+        inline int GetCategoryIndex(string a_categoryName) const
+        {
+            for (int i = 0; i < m_categories.size(); ++i)
+            {
+                if (a_categoryName == m_categories[i]->GetName())
+                {
+                    return i;
+                }
+            }
+        }
+
+        inline bool IsFull() const
+        {
+            return (m_numFilled == m_categories.size());
+        }
 
     private:
+
+        int m_numFilled = 0;
 
         vector<shared_ptr<Category>> m_categories = 
         {

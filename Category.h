@@ -32,6 +32,11 @@ class Category
 
         // Getters
         inline string const GetName() const { return m_name; };
+        inline string const GetDescription() const { return m_description; };
+        inline string const GetWinner() const { return m_winner; };
+        inline string const GetScore() const { return m_score; };
+        inline int GetPoints() const { return m_points; };
+        inline int GetRound() const { return m_round; };
 
         // Setters
         inline void const SetWinner(string a_winner) { m_winner = a_winner; }
@@ -56,7 +61,7 @@ class MultiplesCategory : public Category
 {
     public:
         // Function to calculate the score for this category
-        int Score(const Dice& a_dice) const { return a_dice.GetDiceCount()[m_multipleIndex]; }
+        int Score(const Dice& a_dice) const { return (a_dice.GetDiceCount()[m_multipleIndex] * (m_multipleIndex + 1)); }
 
         // Function to determine how to achieve this category, given current diceset
         Strategy GetRerollStrategy(shared_ptr<const Dice> a_dice) const
@@ -113,7 +118,7 @@ class KindCategory : public Category
         {
             bool condition_met = false;
             int score = 0;
-            for (int i = 0; i < diceValues.size(); ++i)
+            for (int i = 0; i < 6; ++i)
             {
                 score += diceValues[i] * (i + 1);
                 if (diceValues[i] >= m_numKind) condition_met = true;
@@ -191,7 +196,7 @@ class StraightCategory : public Category
         { 
             const vector<int> &diceValues = a_dice.GetDiceCount();
             int streak = 0;
-            for (int i = 0; i < diceValues.size(); i++)
+            for (int i = 0; i < 6; i++)
             {
                 if (diceValues[i] >= 1) streak++;
                 else streak = 0;
@@ -244,6 +249,20 @@ class StraightCategory : public Category
 
                 // Find all non-contributing dice and add them up
                 vector<int> checkRerolls = a_dice->GetUnlockedUnscored(dicesetsToCheck[i]);
+                /* delete me
+                cout << "diceValues: ";
+                for (int i = 0; i < 6; ++i)
+                {
+                    cout << a_dice->GetDiceCount()[i] << " ";
+                }
+                cout << endl;
+                cout << "unlocked unscored: ";
+                for (int i = 0; i < 6; ++i)
+                {
+                    cout << checkRerolls[i] << " ";
+                }
+                cout << endl;
+                */
                 int rerollsAvailable = accumulate(checkRerolls.begin(), checkRerolls.end(), 0);
 
                 // Go through each face
@@ -259,7 +278,11 @@ class StraightCategory : public Category
                         // If we ran out of rerolls, this is not viable
                         if (rerollsNeeded > rerollsAvailable) break;
                     }
-                    else if (dicesetsToCheck[i][j]) straightAttempt[j]++;
+                    // If there are enough dice of this face, keep the minimum required
+                    else if (dicesetsToCheck[i][j]) 
+                    {
+                        straightAttempt[j] = max(1, straightAttempt[j]);
+                    }
                 }
 
                 // Ran out of rerolls, so this configuration is impossible
