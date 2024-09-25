@@ -1,0 +1,1 @@
+g++ yahtzee.cpp Strategy.cpp Category.cpp -o yahtzee -std=c++11
