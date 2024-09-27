@@ -63,7 +63,7 @@ class Strategy
     
     private:
 
-        string PrintTargetDice() const;
+        string PrintDice(vector<int> a_diceValues) const;
 
         int m_currentScore; // if this category is selected, the value it would give
         int m_maxScore; // maximum score possible for this category, given the diceset

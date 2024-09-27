@@ -13,7 +13,7 @@ void Turn::Play(int a_roundNum)
     while (!stand)
     {
         // Roll and print the dice.
-        cout << "=================================" << endl;
+        cout << endl << "=================================" << endl;
         cout << "Roll " << rollNum << endl;
         m_player->RollAll(*m_dice);
         m_dice->Print();

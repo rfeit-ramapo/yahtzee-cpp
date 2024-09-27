@@ -29,13 +29,28 @@ void Strategy::Print(bool suggest) const
     }
     else
     {
+        // Calculate which dice should be set aside (in addition to what is already locked).
+        vector<int> currentFreeDice = m_dice->GetFreeDice();
+        vector<int> setAside(6, 0);
+        bool lockNew = false;
+
+        for (int i = 0; i < 6; ++i)
+        {
+            if (currentFreeDice[i] - m_rerollCounts[i] > 0) lockNew = true;
+            setAside[i] = currentFreeDice[i] - m_rerollCounts[i];
+        }
+
         if (suggest)
         {
-            cout << "I recommend that you try for the " << m_categoryName << " category with " << PrintTargetDice() << " because it gives the maximum possible points (" << m_maxScore << ") among all the options." << endl;
+            cout << "I recommend that you try for the " << m_categoryName << " category with " << PrintDice(m_targetDice) << " because it gives the maximum possible points (" << m_maxScore << ") among all the options." << endl;
         }
         else
         {
-            cout << "The computer plans to reroll to try for the " << m_categoryName << " category with " << PrintTargetDice() << " because it gives the maximum possible points (" << m_maxScore << ") among all the options." << endl;
+            cout << "The computer plans to reroll to try for the " << m_categoryName << " category with " << PrintDice(m_targetDice) << " because it gives the maximum possible points (" << m_maxScore << ") among all the options." << endl;
+            if (lockNew)
+            {
+                cout << "Therefore, " << PrintDice(setAside) << " will be set aside." << endl;
+            }
         }
         
     }
@@ -59,17 +74,18 @@ void Strategy::Enact(Scorecard& a_scorecard, int a_round)
     a_scorecard.Print();
 }
 
-string Strategy::PrintTargetDice() const
+string Strategy::PrintDice(vector<int> a_diceValues) const
 {
     string fullString = "";
 
     int diceCounted = 0;
-    int totalDice = accumulate(m_targetDice.begin(), m_targetDice.end(), 0);
+    int totalDice = accumulate(a_diceValues.begin(), a_diceValues.end(), 0);
+    bool multipleFaces = false;
 
     for (int i = 0; i < 6; ++i)
     {
         int value = i + 1;
-        int count = m_targetDice[i];
+        int count = a_diceValues[i];
         diceCounted += count;
 
         string valueString;
@@ -108,13 +124,14 @@ string Strategy::PrintTargetDice() const
             if (diceCounted == totalDice)
             {
                 // Don't print 'and' if there was only one type of die
-                if (count != 5) fullString += "and ";
+                if (multipleFaces) fullString += "and ";
                 fullString += to_string(count) + " " + valueString;
                 return fullString;
             }
+            
+            multipleFaces = true;
             fullString += to_string(count) + " " + valueString + ", ";
         }
     }
-
     return fullString;
 };
