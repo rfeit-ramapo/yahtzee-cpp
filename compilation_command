@@ -1,1 +1,1 @@
-g++ yahtzee.cpp Strategy.cpp Category.cpp -o yahtzee -std=c++11
+g++ yahtzee.cpp Strategy.cpp Category.cpp Computer.cpp Dice.cpp Human.cpp Round.cpp Scorecard.cpp Strategy.cpp StrategyEngine.cpp Tournament.cpp Turn.cpp -o yahtzee -std=c++11

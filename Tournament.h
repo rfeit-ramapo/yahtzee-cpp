@@ -10,15 +10,7 @@ class Tournament
     public:
 
         // Functions
-        void Play()
-        {
-            while (!m_scorecard->IsFull())
-            {
-                Round round = Round(m_roundNum, m_players, m_dice, m_strat, m_scorecard);
-                round.Play();
-                m_roundNum++;
-            }
-        };
+        void Play();
 
         // Constructors
         Tournament() // Default
