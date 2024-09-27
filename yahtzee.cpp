@@ -21,7 +21,7 @@ int main()
     stratTester.FillCategory(11);
     */
 
-   //stratTester.FillCategory(11);
+    stratTester.FillCategory(10);
     shared_ptr<Dice> dice = make_shared<Dice>(Dice({1, 1, 1, 1, 1, 0}, {1, 1, 1, 1, 1, 0}));
     Strategy mystrat = stratTester.Strategize(dice);
 

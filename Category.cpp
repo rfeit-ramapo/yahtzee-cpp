@@ -240,9 +240,10 @@ int StraightCategory::Score(const Dice& a_dice) const
     {
         if (diceValues[i] >= 1) streak++;
         else streak = 0;
+
+        if (streak == m_streakNum) return m_scoreValue;
     }
-    if (streak >= m_streakNum) return m_scoreValue;
-    else return 0;
+    return 0;
 }
 
 Strategy StraightCategory::GetRerollStrategy(shared_ptr<const Dice> a_dice) const
