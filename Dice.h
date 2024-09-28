@@ -12,10 +12,14 @@ class Dice
         inline void LockAllDice() { m_locked = m_diceCount; }
         inline void UnlockAllDice() { m_locked = {0, 0, 0, 0, 0, 0}; }
 
+        static vector<int> ListToCount(vector<int> a_diceList);
+        static vector<int> CountToList(vector<int> a_diceCount);
+        
         // Lock all dice except those specified to reroll.
-        void LockDice(vector<int> a_keptDice);
+        bool LockDice(vector<int> a_keptDice);
 
         vector<int> RollAll();
+        bool ManualRoll(vector<int> a_input);
 
         // Returns a vector indicating which dice values to reroll to match the parameter.
         vector<int> RerollToMatch(const vector<int>& target) const;

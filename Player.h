@@ -3,6 +3,7 @@
 #include <string>
 #include "StrategyEngine.h"
 #include "Dice.h"
+#include "Input.h"
 
 using namespace std;
 

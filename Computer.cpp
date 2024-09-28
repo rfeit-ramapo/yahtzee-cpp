@@ -3,9 +3,37 @@
 
 using namespace std;
 
-int Computer::RollOne(Dice &dice) { return dice.RollOne(); }
+int Computer::RollOne(Dice &dice) 
+{ 
+    // Manual input option
+    cout << "Computer's roll..." << endl;
+    cout << "Would you like to manually input this dice roll? (y/n)" << endl;
+    
+    if (Input::ValidateYesNo())
+    {
+        cout << "Input the result of your roll." << endl;
+        return Input::ValidateInt({1,2,3,4,5,6}, "dice face");
+    }
 
-vector<int> Computer::RollAll(Dice &dice) { return dice.RollAll(); };
+    return dice.RollOne(); 
+}
+
+vector<int> Computer::RollAll(Dice &dice) 
+{ 
+    // Manual input option
+    cout << "Would you like to manually input this dice roll? (y/n)" << endl;
+    if (Input::ValidateYesNo())
+    {
+        cout << "Input the result of your roll." << endl;
+        while (true)
+        {
+            vector<int> inputDice = Input::ValidateIntList({1,2,3,4,5,6}, "dice faces", 5);
+            if (dice.ManualRoll(inputDice)) return inputDice;
+        }
+    }
+
+    return dice.RollAll(); 
+};
 
 vector<int> Computer::ListAvailableCategories
 (
@@ -26,7 +54,8 @@ vector<int> Computer::ListAvailableCategories
     // Print the categories.
     for (int i = 0; i < availableCategories.size(); ++i)
     {
-        cout << (availableCategories[i] + 1) << " ";
+        ++availableCategories[i];
+        cout << availableCategories[i] << " ";
     }
     cout << endl;
 
