@@ -1,8 +1,20 @@
 #include "Tournament.h"
 #include <iostream>
 
+void Tournament::PrintInstructions()
+{
+    cout << endl << "Welcome to Yahtzee! Below you will find the scorecard categories. When asked to input dice, please use face values. When asked for multiple values (dice or categories), please separate each by a space. All categories should be specified by index. To help visualize the dice, all 'locked' dice (those that have been set aside and cannot be rerolled) are displayed in red." << endl << endl;
+
+    m_scorecard->Print();
+
+    cout << "To begin the game, please press enter." << endl;
+    cin.get();
+}
+
 void Tournament::Play()
 {
+    PrintInstructions();
+
     while (!m_scorecard->IsFull())
     {
         Round round = Round(m_roundNum, m_players, m_dice, m_strat, m_scorecard);

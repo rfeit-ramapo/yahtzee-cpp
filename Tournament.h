@@ -10,6 +10,7 @@ class Tournament
     public:
 
         // Functions
+        void PrintInstructions();
         void Play();
 
         // Constructors

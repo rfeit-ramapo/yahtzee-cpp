@@ -34,7 +34,7 @@ bool Dice::LockDice(vector<int> a_keptDice)
         int numToLock = m_diceCount[i] - a_keptDice[i];
         if (numToLock < m_locked[i])
         {
-            cerr << "Error: Input must be dice that have not already been set aside. Please try again." << endl;
+            cerr << "Error: Input must be dice that were rolled and that have not already been set aside. Please try again." << endl;
             return false;
         }
         newLocked[i] = numToLock;
