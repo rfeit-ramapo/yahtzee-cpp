@@ -29,7 +29,9 @@ void Round::DetermineFirstPlayer()
 
 void Round::Play()
 {
+    cout << "=================================" << endl << endl;
     cout << "Round " << m_roundNum << ":" << endl << endl;
+    cout << "=================================" << endl;
     DetermineFirstPlayer();
     cout << m_players[0]->GetLogName() << " will go first." << endl;
 
@@ -40,4 +42,8 @@ void Round::Play()
     // Turn for Player 2
     turn = Turn(m_players[1], m_dice, m_strat, m_scorecard);
     turn.Play(m_roundNum);
+
+    // Print current score for each player
+    cout << "Score - " << m_players[0]->GetLogName() << ": " << m_players[0]->GetScore() << endl;
+    cout << "Score - " << m_players[1]->GetLogName() << ": " << m_players[1]->GetScore() << endl;
 }

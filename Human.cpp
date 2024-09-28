@@ -29,7 +29,7 @@ vector<int> Human::ListAvailableCategories
 
     // Print a basic scorecard for reference.
     cout << endl;
-    a_strat.GetScorecard()->Print();
+    //a_strat.GetScorecard()->Print();
 
     // Get player list.
     cout << "Please list all scorecard categories available, given the dice set so far." << endl;

@@ -18,7 +18,7 @@ vector<int> Computer::ListAvailableCategories
 
     // Print a basic scorecard for reference.
     cout << endl;
-    a_strat.GetScorecard()->Print();
+    //a_strat.GetScorecard()->Print();
 
     // Inform player of next step.
     cout << "Listing all available categories, given the dice set so far..." << endl;
