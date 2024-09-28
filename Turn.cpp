@@ -16,6 +16,7 @@ void Turn::Play(int a_roundNum)
         cout << "=================================" << endl;
         cout << "Roll " << rollNum << endl;
         m_player->RollAll(*m_dice);
+        cout << "Roll result: ";
         m_dice->Print();
 
         if (rollNum < 3) 

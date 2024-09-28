@@ -40,6 +40,7 @@ void Round::Play()
     turn.Play(m_roundNum);
 
     // Turn for Player 2
+    if (m_scorecard->IsFull()) return;
     turn = Turn(m_players[1], m_dice, m_strat, m_scorecard);
     turn.Play(m_roundNum);
 

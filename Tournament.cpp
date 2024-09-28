@@ -34,12 +34,12 @@ void Tournament::Play()
     // Player 1 wins
     if (player1.GetScore() > player2.GetScore())
     {
-        cout << player1.GetLogName() << " wins!" << endl;
+        cout << "Winner: " << player1.GetLogName() << endl;
     }
     // Player 2 wins
     else if (player1.GetScore() < player2.GetScore())
     {
-        cout << player2.GetLogName() << " wins!" << endl;
+        cout << "Winner: " << player2.GetLogName() << endl;
     }
     // Draw
     else
