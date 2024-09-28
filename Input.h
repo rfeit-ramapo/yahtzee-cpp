@@ -11,13 +11,13 @@ class Input
         static bool ValidateYesNo();
 
         // Validates that user input exactly the desired list
-        static void ValidateExactIntList(vector<int> a_valid, string a_type = "values");
+        static void ValidateExactIntList(vector<int> a_valid, string a_type = "values", string a_helpString = "");
 
         // Validates that user input a subset of a valid list of integers
-        static vector<int> ValidateIntList(vector<int> a_valid, string a_type = "values", int a_countRequired = 0);
+        static vector<int> ValidateIntList(vector<int> a_valid, string a_type = "values", int a_countRequired = 0, string a_helpString = "");
 
         // Validates that user input a subset of a valid list of integers
-        static int ValidateInt(vector<int> a_valid, string a_type = "value");
+        static int ValidateInt(vector<int> a_valid, string a_type = "value", string a_helpString = "");
 
-        static bool ValidateStandReroll();
+        static bool ValidateStandReroll(string a_helpString = "");
 };

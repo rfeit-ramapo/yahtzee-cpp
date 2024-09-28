@@ -18,6 +18,7 @@ class Strategy
         inline bool PlanToStand() const { return (m_maxScore == m_currentScore); }
 
         void Print(bool suggest) const;
+        string GetString(bool suggest) const;
 
         void Enact(Scorecard& a_scorecard, int a_round);
 

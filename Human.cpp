@@ -46,16 +46,18 @@ vector<int> Human::ListAvailableCategories
 
     // Print a basic scorecard for reference.
     cout << endl;
-    //a_strat.GetScorecard()->Print();
 
     // Get player list.
     cout << "Please list all scorecard categories available, given the dice set so far." << endl;
+
+    string helpString = "The available categories are:";
     // Validate user input.
     for (int i = 0; i < availableCategories.size(); ++i) 
     {
         ++availableCategories[i];
+        helpString += " " + to_string(availableCategories[i]);
     }
-    Input::ValidateExactIntList(availableCategories, "categories");
+    Input::ValidateExactIntList(availableCategories, "categories", helpString);
 
     return availableCategories;
 }
@@ -68,19 +70,18 @@ void Human::PursueCategories
 ) 
 {
     cout << "Please input one or two categories to pursue." << endl;
+    m_helpStrat = a_strat.Strategize(a_dice);
     // Loop to handle processing user input.
-    // Loop to handle processing user input.
-    Input::ValidateIntList(a_availableCategories, "categories");
+    Input::ValidateIntList(a_availableCategories, "categories", 0, m_helpStrat.GetString(true));
 };
 
 bool Human::HandleRerolls(shared_ptr<Dice> a_dice)
 {
     // If roll again, list the dice the player wants to re-roll. Identify dice by their current face (e.g., "I will re-roll 3, 1 and 6").
-
     cout << "Please choose whether to stand or reroll." << endl;
-
+    
     // Handle player input.
-    if (Input::ValidateStandReroll()) return true;
+    if (Input::ValidateStandReroll(m_helpStrat.GetString(true))) return true;
 
     cout << "Which dice would you like to reroll? Input the face values." << endl;
 
@@ -110,11 +111,13 @@ void Human::ChooseCategory
         return;
     }
 
+    m_helpStrat = a_strat.Strategize(a_dice);
+
     // Take player input
     cout << "Please identify the category you would like to claim." << endl;
 
     // Loop to handle processing user input.
-    int chosenCategory = Input::ValidateInt(a_availableCategories, "categories") - 1;
+    int chosenCategory = Input::ValidateInt(a_availableCategories, "categories", m_helpStrat.GetString(true)) - 1;
 
     cout << "Please enter the score earned for this category." << endl;
     int claimedScore = Input::ValidateInt(

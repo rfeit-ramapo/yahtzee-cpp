@@ -4,26 +4,32 @@
 
 void Strategy::Print(bool suggest) const
 {
+    cout << GetString(suggest);
+};
+
+string Strategy::GetString(bool suggest) const
+{
+    string stratString = "";
     if (m_maxScore == 0)
     {
         if (suggest) 
         {
-            cout << "I recommend that you stand because there are no fillable categories given your current dice set." << endl;
+            stratString = "I recommend that you stand because there are no fillable categories given your current dice set.\n";
         }
         else 
         {
-            cout << "The computer plans to stand because there are no fillable categories given its current dice set." << endl;
+            stratString = "The computer plans to stand because there are no fillable categories given its current dice set.\n";
         }
     }
     else if (m_currentScore == m_maxScore)
     {
         if (suggest)
         {
-            cout << "I recommend that you try for the " << m_categoryName << " category with your current dice set because it gives the maximum possible points (" << m_maxScore << ") among all the options." << endl;
+            stratString = "I recommend that you try for the " + m_categoryName + " category with your current dice set because it gives the maximum possible points (" + to_string(m_maxScore) + ") among all the options.\n";
         }
         else
         {
-            cout << "The computer plans to stand and try for the " << m_categoryName << " category with its current dice set because it gives the maximum possible points (" << m_maxScore << ") among all the options." << endl;
+            stratString = "The computer plans to stand and try for the " + m_categoryName + " category with its current dice set because it gives the maximum possible points (" + to_string(m_maxScore) + ") among all the options.\n";
         }
         
     }
@@ -42,19 +48,23 @@ void Strategy::Print(bool suggest) const
 
         if (suggest)
         {
-            cout << "I recommend that you try for the " << m_categoryName << " category with " << PrintDice(m_targetDice) << " because it gives the maximum possible points (" << m_maxScore << ") among all the options." << endl;
+            stratString = "I recommend that you try for the " + m_categoryName + " category with " + PrintDice(m_targetDice) + " because it gives the maximum possible points (" + to_string(m_maxScore) + ") among all the options.\n";
+            if (lockNew)
+            {
+                stratString += "Therefore, " + PrintDice(setAside) + " should be set aside.\n";
+            }
         }
         else
         {
-            cout << "The computer plans to reroll to try for the " << m_categoryName << " category with " << PrintDice(m_targetDice) << " because it gives the maximum possible points (" << m_maxScore << ") among all the options." << endl;
+            stratString = "The computer plans to reroll to try for the " + m_categoryName + " category with " + PrintDice(m_targetDice) + " because it gives the maximum possible points (" + to_string(m_maxScore) + ") among all the options.\n";
             if (lockNew)
             {
-                cout << "Therefore, " << PrintDice(setAside) << " will be set aside." << endl;
+                stratString += "Therefore, " + PrintDice(setAside) + " will be set aside.\n";
             }
         }
-        
     }
-};
+    return stratString;
+}
 
 void Strategy::Enact(Scorecard& a_scorecard, int a_round)
 {

@@ -26,7 +26,7 @@ bool Input::ValidateYesNo()
 }
 
         // Validates that user input exactly the desired list
-void Input::ValidateExactIntList(vector<int> a_valid, string a_type)
+void Input::ValidateExactIntList(vector<int> a_valid, string a_type, string a_helpString)
 {
     while (true)
     {
@@ -34,6 +34,13 @@ void Input::ValidateExactIntList(vector<int> a_valid, string a_type)
         vector<int> playerList;
         string input;
         getline(cin, input);
+
+        // Provide help if it was requested and is available.
+        if (!a_helpString.empty() && (input == "h" || input == "H"))
+        {
+            cout << a_helpString << endl;
+            continue;
+        }
 
         // Check syntax: must be a list of integers, separated by spaces.
         istringstream stream(input);
@@ -62,7 +69,7 @@ void Input::ValidateExactIntList(vector<int> a_valid, string a_type)
 }
 
         // Validates that user input a subset of a valid list of integers
-vector<int> Input::ValidateIntList(vector<int> a_valid, string a_type, int a_countRequired)
+vector<int> Input::ValidateIntList(vector<int> a_valid, string a_type, int a_countRequired, string a_helpString)
 {
     while (true)
     {
@@ -70,6 +77,13 @@ vector<int> Input::ValidateIntList(vector<int> a_valid, string a_type, int a_cou
         vector<int> playerList;
         string input;
         getline(cin, input);
+
+        // Provide help if it was requested and is available.
+        if (!a_helpString.empty() && (input == "h" || input == "H"))
+        {
+            cout << a_helpString << endl;
+            continue;
+        }
 
         // Check syntax: must be a list of integers, separated by spaces.
         istringstream stream(input);
@@ -118,16 +132,23 @@ vector<int> Input::ValidateIntList(vector<int> a_valid, string a_type, int a_cou
 }
 
         // Validates that user input a subset of a valid list of integers
-int Input::ValidateInt(vector<int> a_valid, string a_type)
+int Input::ValidateInt(vector<int> a_valid, string a_type, string a_helpString)
 {
     while (true)
     {
         int playerInt;
         string input;
         getline(cin, input);
-        istringstream stream(input);
+
+        // Provide help if it was requested and is available.
+        if (!a_helpString.empty() && (input == "h" || input == "H"))
+        {
+            cout << a_helpString << endl;
+            continue;
+        }
 
         // Try to convert the string to an integer
+        istringstream stream(input);
         stream >> playerInt;
         if (!stream.eof())
         {
@@ -145,12 +166,19 @@ int Input::ValidateInt(vector<int> a_valid, string a_type)
     }
 }
 
-bool Input::ValidateStandReroll()
+bool Input::ValidateStandReroll(string a_helpString)
 {
     while(true)
     {
         string input;
         getline(cin, input);
+
+        // Provide help if it was requested and is available.
+        if (!a_helpString.empty() && (input == "h" || input == "H"))
+        {
+            cout << a_helpString << endl;
+            continue;
+        }
 
         transform(input.begin(), input.end(), input.begin(), 
             [](unsigned char c){ return tolower(c); });
