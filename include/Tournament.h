@@ -4,6 +4,7 @@
 #include "Scorecard.h"
 #include "StrategyEngine.h"
 
+// Class to hold information about the entire tournament and kick off play.
 class Tournament
 {
 public:

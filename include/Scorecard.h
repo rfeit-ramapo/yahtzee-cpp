@@ -13,6 +13,8 @@ class Scorecard
 {
     public:
 
+        static constexpr int NUM_CATEGORIES = 12;
+
         // for temporary testing purposes
         void FillCategory(int a_categoryIndex);
 
