@@ -5,6 +5,8 @@
 #include <iomanip>
 #include "Category.h"
 
+class Player; // Forward declaration
+
 using namespace std;
 
 class Scorecard
@@ -23,6 +25,16 @@ class Scorecard
 
         // Constructors
         Scorecard() {}; // Default
+
+        void FillMultiple
+        (
+            vector<int> a_categoryIndices,
+            vector<int> a_scores,
+            vector<string> a_winners,
+            vector<int> a_rounds,
+            shared_ptr<Player> a_humanPlayer,
+            shared_ptr<Player> a_pcPlayer
+        );
 
         // Getters
         inline const vector<shared_ptr<Category>>& GetCategories() const

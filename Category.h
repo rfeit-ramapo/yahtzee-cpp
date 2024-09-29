@@ -53,6 +53,7 @@ class Category
         inline string const GetScore() const { return m_score; };
         inline int GetPoints() const { return m_points; };
         inline int GetRound() const { return m_round; };
+        inline bool IsFull() const { return m_full; };
 
         // Setters
         inline void const SetWinner(string a_winner) { m_winner = a_winner; }

@@ -1,4 +1,6 @@
 #include "Tournament.h"
+#include "Input.h"
+#include "Serialize.h"
 #include <iostream>
 
 void Tournament::PrintInstructions()
@@ -15,11 +17,20 @@ void Tournament::Play()
 {
     PrintInstructions();
 
+    Serialize serializer;
+    cout << "Would you like to load the game from a file? (y/n)" << endl;
+    if (Input::ValidateYesNo()) serializer.LoadGame(m_roundNum, m_scorecard, m_players[0], m_players[1]);
+
     while (!m_scorecard->IsFull())
     {
         Round round = Round(m_roundNum, m_players, m_dice, m_strat, m_scorecard);
         round.Play();
         m_roundNum++;
+        if (!m_scorecard->IsFull())
+        {
+            cout << "Would you like to save and exit? (y/n)" << endl;
+            if (Input::ValidateYesNo()) serializer.SaveGame(m_roundNum, m_scorecard);
+        }
     }
 
     // Print final scorecard and winner
