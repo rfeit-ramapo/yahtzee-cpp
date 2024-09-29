@@ -35,31 +35,34 @@ string Strategy::GetString(bool suggest) const
     }
     else
     {
-        // Calculate which dice should be set aside (in addition to what is already locked).
-        vector<int> currentFreeDice = m_dice->GetFreeDice();
-        vector<int> setAside(6, 0);
-        bool lockNew = false;
-
-        for (int i = 0; i < 6; ++i)
-        {
-            if (currentFreeDice[i] - m_rerollCounts[i] > 0) lockNew = true;
-            setAside[i] = currentFreeDice[i] - m_rerollCounts[i];
-        }
-
         if (suggest)
         {
             stratString = "I recommend that you try for the " + m_categoryName + " category with " + PrintDice(m_targetDice) + " because it gives the maximum possible points (" + to_string(m_maxScore) + ") among all the options.\n";
+            if (m_currentScore == 0)
+            {
+                stratString += "However, depending on dice rolls you may not be able to score in this category, so be cautious!\n";
+            }
+            else
+            {
+                statString += "At minimum, you will score " + to_string(m_currentScore) + " points in this category.\n";
+            }
+
             if (lockNew)
             {
-                stratString += "Therefore, " + PrintDice(setAside) + " should be set aside.\n";
+                stratString += "Therefore, " + PrintDice(m_rerollCounts) + " should be rerolled.\n";
             }
         }
         else
         {
             stratString = "The computer plans to reroll to try for the " + m_categoryName + " category with " + PrintDice(m_targetDice) + " because it gives the maximum possible points (" + to_string(m_maxScore) + ") among all the options.\n";
+            if (m_currentScore != 0)
+            {
+                statString += "At minimum, the computer will score " + to_string(m_currentScore) + " points in this category.\n";
+            }
+
             if (lockNew)
             {
-                stratString += "Therefore, " + PrintDice(setAside) + " will be set aside.\n";
+                stratString += "Therefore, " + PrintDice(m_rerollCounts) + " will be rerolled.\n";
             }
         }
     }
