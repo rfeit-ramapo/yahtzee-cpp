@@ -1,5 +1,5 @@
 #include <iostream>
-#include "Computer.h"
+#include "../include/Computer.h"
 
 using namespace std;
 

@@ -1,4 +1,4 @@
-#include "Input.h"
+#include "../include/Input.h"
 #include <iostream>
 #include <algorithm>
 #include <sstream>

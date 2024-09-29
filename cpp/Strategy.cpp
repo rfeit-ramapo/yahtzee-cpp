@@ -1,5 +1,5 @@
-#include "Strategy.h"
-#include "Scorecard.h"
+#include "../include/Strategy.h"
+#include "../include/Scorecard.h"
 
 
 void Strategy::Print(bool suggest) const

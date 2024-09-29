@@ -1,4 +1,4 @@
-#include "Player.h"
+#include "../include/Player.h"
 
 vector<int> Player::RollAll(Dice &dice) 
 { 

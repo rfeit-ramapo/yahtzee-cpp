@@ -1,5 +1,5 @@
-#include "Scorecard.h"
-#include "Player.h"
+#include "../include/Scorecard.h"
+#include "../include/Player.h"
 
 using namespace std;
 

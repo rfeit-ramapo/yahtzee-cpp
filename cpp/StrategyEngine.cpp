@@ -1,4 +1,4 @@
-#include "StrategyEngine.h"
+#include "../include/StrategyEngine.h"
 
 vector<int> StrategyEngine::GetPossibleCategories(shared_ptr<const Dice> a_dice) const
 {

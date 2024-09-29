@@ -1,6 +1,6 @@
 #include <random>
 #include <iostream>
-#include "Dice.h"
+#include "../include/Dice.h"
 
 
 vector<int> Dice::ListToCount(vector<int> a_diceList)

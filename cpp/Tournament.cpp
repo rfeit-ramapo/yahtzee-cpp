@@ -1,6 +1,6 @@
-#include "Tournament.h"
-#include "Input.h"
-#include "Serialize.h"
+#include "../include/Tournament.h"
+#include "../include/Input.h"
+#include "../include/Serialize.h"
 #include <iostream>
 
 void Tournament::PrintInstructions()

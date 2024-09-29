@@ -1,6 +1,6 @@
 #include <sstream>
 #include <algorithm>
-#include "Human.h"
+#include "../include/Human.h"
 
 using namespace std;
 

@@ -2,7 +2,7 @@
 #include <sstream>
 #include <vector>
 #include <string>
-#include "Serialize.h"
+#include "../include/Serialize.h"
 
 void Serialize::LoadGame(int& a_currentRound, shared_ptr<Scorecard> a_scorecard, shared_ptr<Player> a_humanPlayer, shared_ptr<Player> a_pcPlayer)
 {
