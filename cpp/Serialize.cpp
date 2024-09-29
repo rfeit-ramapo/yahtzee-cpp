@@ -49,9 +49,14 @@ void Serialize::LoadGame(int& a_currentRound, shared_ptr<Scorecard> a_scorecard,
         ExitError();
     }
 
-    // Scorecard line
+    // Blank line (must be blank, spaces/tabs only)
     getline(m_file, line);
-    if (line != "") ExitError();
+    if (!all_of(line.begin(), line.end(), [](unsigned char c) { return isspace(c); })) 
+    {
+        ExitError();
+    }
+
+    // Scorecard line
     getline(m_file, line);
     iss.clear();
     iss.str(line);
@@ -69,19 +74,38 @@ void Serialize::LoadGame(int& a_currentRound, shared_ptr<Scorecard> a_scorecard,
         iss.str(line);
         int score, roundNumber;
         string winner;
+        string remaining;
 
         if (!(iss >> score)) ExitError();
 
         if (score == 0)
         {
-            // There should be nothing else on this line
-            if (!iss.eof()) ExitError();
+            // There should be nothing else on this line (except spaces or tabs)
+            getline(iss, remaining);
+            if (!all_of(
+                remaining.begin(), 
+                remaining.end(), 
+                [](unsigned char c) { return std::isspace(c); })
+            ) 
+            {
+                ExitError();
+            }
             ++index;
             continue;
         }
 
         if (!(iss >> winner >> roundNumber)) ExitError();
-        if (!iss.eof() || (winner != "Human") && (winner != "Computer")) ExitError();
+        // There should be nothing else on this line (except spaces or tabs)
+        getline(iss, remaining);
+        if (!all_of(
+            remaining.begin(), 
+            remaining.end(), 
+            [](unsigned char c) { return std::isspace(c); })
+            || ((winner != "Human") && (winner != "Computer"))
+        ) 
+        {
+            ExitError();
+        }
 
         categories.push_back(index);
         scores.push_back(score);
