@@ -49,7 +49,8 @@
     "variant": "cpp",
     "algorithm": "cpp",
     "fstream": "cpp",
-    "functional": "cpp"
+    "functional": "cpp",
+    "__memory": "cpp"
   },
   "C_Cpp.errorSquiggles": "disabled"
 }

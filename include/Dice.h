@@ -8,6 +8,9 @@ class Dice
 {
     public:
 
+        static constexpr int NUM_DICE = 5;
+        static constexpr int NUM_DICE_FACES = 6;
+
         inline int RollOne() { return GenerateDieValue(); }
         inline void LockAllDice() { m_locked = m_diceCount; }
         inline void UnlockAllDice() { m_locked = {0, 0, 0, 0, 0, 0}; }

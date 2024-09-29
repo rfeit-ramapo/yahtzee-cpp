@@ -9,8 +9,6 @@ class Computer : public Player
 
         int RollOne(Dice &dice);
 
-        vector<int> RollAll(Dice &dice);
-
         vector<int> ListAvailableCategories(
             const StrategyEngine& a_strat, 
             shared_ptr<const Dice> a_dice

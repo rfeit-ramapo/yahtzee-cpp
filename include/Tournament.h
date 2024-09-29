@@ -62,7 +62,7 @@ private:
         3) Confirm that the player has read the instructions and wishes to continue
     Reference: none
     ********************************************************************* */
-    void PrintInstructions();
+    void PrintInstructions() const;
 
     /* *********************************************************************
     Function Name: PrintWinner
@@ -75,5 +75,5 @@ private:
         3) Determine winner based on player scores and print result
     Reference: none
     ********************************************************************* */
-    void PrintWinner();
+    void PrintWinner() const;
 };
