@@ -14,7 +14,7 @@ class Player
         // Functions
         virtual int RollOne(Dice &dice) = 0;
 
-        virtual vector<int> RollAll(Dice &dice) = 0;
+        vector<int> RollAll(Dice &dice);
 
         virtual vector<int> ListAvailableCategories(
             const StrategyEngine& a_strat, 

@@ -37,32 +37,22 @@ string Strategy::GetString(bool suggest) const
     {
         if (suggest)
         {
-            stratString = "I recommend that you try for the " + m_categoryName + " category with " + PrintDice(m_targetDice) + " because it gives the maximum possible points (" + to_string(m_maxScore) + ") among all the options.\n";
+            stratString = "I recommend that you try for the " + m_categoryName + " category with " + PrintDice(m_targetDice) + " because it gives the maximum possible points (" + to_string(m_maxScore) + ") among all the options. Therefore, " + PrintDice(m_rerollCounts) + " should be rerolled.\n";
             if (m_currentScore == 0)
             {
                 stratString += "However, depending on dice rolls you may not be able to score in this category, so be cautious!\n";
             }
             else
             {
-                statString += "At minimum, you will score " + to_string(m_currentScore) + " points in this category.\n";
-            }
-
-            if (lockNew)
-            {
-                stratString += "Therefore, " + PrintDice(m_rerollCounts) + " should be rerolled.\n";
+                stratString += "At minimum, you will score " + to_string(m_currentScore) + " points in this category.\n";
             }
         }
         else
         {
-            stratString = "The computer plans to reroll to try for the " + m_categoryName + " category with " + PrintDice(m_targetDice) + " because it gives the maximum possible points (" + to_string(m_maxScore) + ") among all the options.\n";
+            stratString = "The computer plans to reroll to try for the " + m_categoryName + " category with " + PrintDice(m_targetDice) + " because it gives the maximum possible points (" + to_string(m_maxScore) + ") among all the options. Therefore, " + PrintDice(m_rerollCounts) + " will be rerolled.\n";
             if (m_currentScore != 0)
             {
-                statString += "At minimum, the computer will score " + to_string(m_currentScore) + " points in this category.\n";
-            }
-
-            if (lockNew)
-            {
-                stratString += "Therefore, " + PrintDice(m_rerollCounts) + " will be rerolled.\n";
+                stratString += "At minimum, the computer will score " + to_string(m_currentScore) + " points in this category.\n";
             }
         }
     }

@@ -63,22 +63,15 @@ vector<int> Dice::RollAll()
 bool Dice::ManualRoll(vector<int> a_input)
 {
     // Make the dice match
-    m_diceList = a_input;
-    m_diceCount = vector<int>(6, 0);
-    for (int i = 0; i < 5; ++i)
+    m_diceCount = m_locked;
+    m_diceList = CountToList(m_locked);
+    m_diceList.insert(m_diceList.end(), a_input.begin(), a_input.end());
+    
+    for (int i = 0; i < a_input.size(); ++i)
     {
         ++m_diceCount[m_diceList[i] - 1];
     }
 
-    // Ensure the locked dice stayed the same.
-    for (int i = 0; i < 6; ++i)
-    {
-        if (m_locked[i] > m_diceCount[i])
-        {
-            cerr << "Error: Dice set aside cannot be rerolled. Please try again." << endl;
-            return false;
-        }
-    }
     return true;
 }
 

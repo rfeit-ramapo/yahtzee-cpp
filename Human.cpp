@@ -18,23 +18,6 @@ int Human::RollOne(Dice& dice)
     return dice.RollOne();
 };
 
-vector<int> Human::RollAll(Dice &dice) 
-{
-    // Manual input option
-    cout << "Would you like to manually input this dice roll? (y/n)" << endl;
-    if (Input::ValidateYesNo())
-    {
-        cout << "Input the result of your roll." << endl;
-        while (true)
-        {
-            vector<int> inputDice = Input::ValidateIntList({1,2,3,4,5,6}, "dice faces", 5);
-            if (dice.ManualRoll(inputDice)) return inputDice;
-        }
-    }
-
-    return dice.RollAll();
-};
-
 vector<int> Human::ListAvailableCategories
 (
     const StrategyEngine& a_strat, 
