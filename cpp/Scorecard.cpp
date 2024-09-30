@@ -3,14 +3,20 @@
 
 using namespace std;
 
-void Scorecard::FillCategory(int a_categoryIndex)
-{
-    shared_ptr<Category> category = m_categories[a_categoryIndex];
-    category->SetFull();
-
-    m_numFilled++;
-};
-
+/* *********************************************************************
+Function Name: FillCategory
+Purpose: Fills and enters info for a particular category
+Parameters: 
+            a_categoryIndex, the index of the category to fill
+            a_points, the number of points scored
+            a_round, the round this category was filled in
+            a_winner, the name of the winner of this category
+Return Value: none
+Algorithm:
+    1) Locates the desired category, then fills in info as required
+    2) Increases numFilled variable for Scorecard
+Reference: none
+********************************************************************* */
 void Scorecard::FillCategory(int a_categoryIndex, int a_points, int a_round, string a_winner)
 {
     shared_ptr<Category> category = m_categories[a_categoryIndex];
@@ -22,6 +28,23 @@ void Scorecard::FillCategory(int a_categoryIndex, int a_points, int a_round, str
     m_numFilled++;
 };
 
+/* *********************************************************************
+Function Name: FillMultiple
+Purpose: Fills multiple categories at once
+Parameters: 
+            a_categoryIndices, a vector of indices of categories to fill
+            a_scores, a vector of the number of points scored
+            a_winner, the name of the winner of this category
+            a_rounds, a vector of which rounds the categories were filled in
+            a_humanPlayer, a pointer to the human player (so their score can be adjusted)
+            a_pcPlayer, a pointer to the computer palyer (so their score can be adjusted)
+Return Value: none
+Algorithm:
+    1) Loops through each category index provided
+        2) Adds score to the human or computer player as needed
+    3) Fills the category with corresponding info from each vector
+Reference: none
+********************************************************************* */
 void Scorecard::FillMultiple
 (
     vector<int> a_categoryIndices,
@@ -40,16 +63,18 @@ void Scorecard::FillMultiple
     }
 }
 
-void Scorecard::PrintBasic() const
-{
-    cout << "Basic Scorecard:" << endl;
-    for (int i = 0; i < m_categories.size(); ++i)
-    {
-        cout << setw(4) << left << (i + 1) << setw(16) << left << m_categories[i]->GetName() << endl;
-    }
-    cout << endl;
-}
-
+/* *********************************************************************
+Function Name: Print
+Purpose: Prints the scorecard out
+Parameters: None
+Return Value: none
+Algorithm:
+    1) Prints the header
+    2) Loop through each category
+        3) Print basic info of each category
+        4) Print info about who won the category, if applicable
+Reference: none
+********************************************************************* */
 void Scorecard::Print() const
 {
     cout << "Current Scorecard:" << endl;
@@ -66,7 +91,8 @@ void Scorecard::Print() const
 
     cout << endl << "========================================================================================================================" << endl;
         
-    for (int i = 0; i < m_categories.size(); ++i)
+    // Loop through each category
+    for (int i = 0; i < NUM_CATEGORIES; ++i)
     {
         cout 
             << setw(7) << left << (i + 1)
@@ -74,6 +100,8 @@ void Scorecard::Print() const
             << setw(40) << left << m_categories[i]->GetDescription() 
             << setw(33) << left << m_categories[i]->GetScore();
             
+        // Only print out winning info if it has been filled
+
         if (!m_categories[i]->GetWinner().empty())
         {
             cout << setw(10) << left << m_categories[i]->GetWinner();

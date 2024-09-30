@@ -14,11 +14,6 @@ class StrategyEngine
 
         Strategy Strategize(shared_ptr<const Dice> a_dice) const;
 
-        inline void FillCategory(int a_categoryIndex) 
-        { 
-            m_scorecard->FillCategory(a_categoryIndex); 
-        }
-
         // Constructors
         StrategyEngine() {}; // Default
 

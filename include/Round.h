@@ -6,6 +6,7 @@
 
 using namespace std;
 
+// For handling a round of the game.
 class Round
 {
 public:
