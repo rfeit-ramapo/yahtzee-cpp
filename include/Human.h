@@ -34,7 +34,6 @@ class Human : public Player
 
         // Constructors
         Human() : Player("You", "Human") {}; // Default
-        Human(int a_score) : Player("You", "Human", a_score) {};
 
     private:
         Strategy m_helpStrat;

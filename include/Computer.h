@@ -34,7 +34,6 @@ class Computer : public Player
 
         // Constructors
         Computer() : Player("The computer", "Computer") {}; // Default
-        Computer(int a_score) : Player("The computer", "Computer", a_score) {};
 
     private:
         Strategy m_strat;
