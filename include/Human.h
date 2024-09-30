@@ -2,6 +2,7 @@
 
 using namespace std;
 
+// Class to handle functionality for a human player.
 class Human : public Player
 {
 public:

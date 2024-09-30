@@ -3,6 +3,7 @@
 
 using namespace std;
 
+// Class to hold information for a computer player.
 class Computer : public Player
 {
 public:

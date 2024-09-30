@@ -7,6 +7,7 @@
 
 using namespace std;
 
+// Class to hold info about a specific player.
 class Player
 {
 public:
@@ -14,7 +15,7 @@ public:
     // Constructors
 
     // Default
-    Player() {}; // Default
+    Player() {};
 
     // Including a log name and internal name
     Player(string a_logName, string a_internalName): 
