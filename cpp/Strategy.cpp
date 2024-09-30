@@ -1,15 +1,24 @@
 #include "../include/Strategy.h"
 #include "../include/Scorecard.h"
 
-
-void Strategy::Print(bool suggest) const
-{
-    cout << GetString(suggest);
-};
-
+/* *********************************************************************
+Function Name: GetString
+Purpose: Creates a user-friendly string describing this strategy
+Parameters: 
+            suggest, a boolean indicating whether this is a suggestion for the user
+Return Value: a string describing the strategy
+Algorithm:
+    1) Creates a string to hold the strategy info
+    2) If the max score is zero, this strategy is for a dead-end dice set
+    3) If the current score is the max score, print a stand strategy
+    4) Otherwise, create a string explaining how to reroll for maximum points
+Reference: none
+********************************************************************* */
 string Strategy::GetString(bool suggest) const
 {
     string stratString = "";
+
+    // Stand strategy - no fillable categories
     if (m_maxScore == 0)
     {
         if (suggest) 
@@ -21,6 +30,8 @@ string Strategy::GetString(bool suggest) const
             stratString = "The computer plans to stand because there are no fillable categories given its current dice set.\n";
         }
     }
+
+    // Stand strategy - already reached maximum score
     else if (m_currentScore == m_maxScore)
     {
         if (suggest)
@@ -33,6 +44,8 @@ string Strategy::GetString(bool suggest) const
         }
         
     }
+
+    // Reroll strategy - current score is not at its maximum potential
     else
     {
         if (suggest)
@@ -59,6 +72,19 @@ string Strategy::GetString(bool suggest) const
     return stratString;
 }
 
+/* *********************************************************************
+Function Name: Enact
+Purpose: Enacts this strategy for a Computer player by filling the scorecard
+Parameters: 
+            a_scorecard, a reference to the scorecard to update
+            a_round, the current round number
+Return Value: none
+Algorithm:
+    1) If attempting to enact an empty strategy, skip
+    2) Get the category info and fill it via the scorecard
+    3) Print the scorecard
+Reference: none
+********************************************************************* */
 void Strategy::Enact(Scorecard& a_scorecard, int a_round)
 {
     // If this strategy is not scoring, do not fill any categories.
@@ -68,29 +94,44 @@ void Strategy::Enact(Scorecard& a_scorecard, int a_round)
         return;
     }
 
+    // Fill the category with info
     int categoryIndex = a_scorecard.GetCategoryIndex(m_categoryName);
-
     a_scorecard.FillCategory(categoryIndex, m_currentScore, a_round, "Computer");
-
     cout << "Filling the " << m_categoryName << " category with a score of " << m_currentScore << " points." << endl << endl;
 
     a_scorecard.Print();
 }
 
+/* *********************************************************************
+Function Name: PrintDice
+Purpose: Gets a string listing dice counts in a user-friendly format
+        (e.g. 1 Ace, 3 Twos, and 2 Sixes)
+Parameters: 
+            a_diceValues, a vector holding dice face counts
+Return Value: a string listing the dice counts in a user-friendly format
+Algorithm:
+    1) Loops through each dice face and checks how many dice there are
+    2) For each die, add on to the string (accounting for plurals)
+    3) When all dice have been processed, ensure string ends properly (with or without "and")
+    4) Return the built string
+Reference: none
+********************************************************************* */
 string Strategy::PrintDice(vector<int> a_diceValues) const
 {
     string fullString = "";
 
     int diceCounted = 0;
     int totalDice = accumulate(a_diceValues.begin(), a_diceValues.end(), 0);
+    // Record if multiple faces were listed in order to determine if "and" is required
     bool multipleFaces = false;
 
-    for (int i = 0; i < 6; ++i)
+    for (int i = 0; i < Dice::NUM_DICE_FACES; ++i)
     {
         int value = i + 1;
         int count = a_diceValues[i];
         diceCounted += count;
 
+        // Switch string based on what face value this is
         string valueString;
         if (count)
         {
