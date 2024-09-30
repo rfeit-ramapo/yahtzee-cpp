@@ -1,5 +1,19 @@
 #include "../include/Turn.h"
 
+/* *********************************************************************
+Function Name: Play
+Purpose: Plays out a turn of the game
+Parameters: 
+            a_roundNum, the round this turn takes place during
+Return Value: None
+Algorithm:
+    1) Print the turn header
+    2) Roll the dice up to three times, or until the player stands
+        3) After each roll, list possible categories, what to pursue, and whether to stand
+    4) Player must choose what category to fill from the available options
+    5) Prepare dice for next player's turn
+Reference: none
+********************************************************************* */
 void Turn::Play(int a_roundNum)
 {            
     cout << "=================================" << endl;
@@ -10,6 +24,7 @@ void Turn::Play(int a_roundNum)
     int rollNum = 1;
     vector<int> availableCategories;
 
+    // Keep rolling until the player has chosen to stand
     while (!stand)
     {
         // Roll and print the dice.
@@ -19,6 +34,7 @@ void Turn::Play(int a_roundNum)
         cout << "Roll result: ";
         m_dice->Print();
 
+        // Allow player choice until third roll
         if (rollNum < 3) 
         {
             // List all scorecard categories available, given the dice set so far.
@@ -30,19 +46,18 @@ void Turn::Play(int a_roundNum)
             // State whether the player wants to roll again or stand after rolls 1 and 2.
             stand = m_player->HandleRerolls(m_dice);
         }
-        else 
-        {
-            break;
-        }
+        else break;
 
         ++rollNum;
     }
 
-    // Announce the category filled, if any, and score earned.
-    // Enter the player name, score, and round number into the scorecard.
-    m_dice->LockAllDice();  // Player stood, so no dice can be rerolled.
+    // Player stood (or reached 3rd roll), so no dice can be rerolled.
+    m_dice->LockAllDice();  
+
+    // Make player list scoring categories and choose from them.
     availableCategories = m_player->ListAvailableCategories(*m_strat, m_dice);
-    // todo: decide whether to actually make the player list categories now
     m_player->ChooseCategory(m_scorecard, a_roundNum, *m_strat, availableCategories, m_dice);
+
+    // Unlock dice in preparation for next turn.
     m_dice->UnlockAllDice();
 };
