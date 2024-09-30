@@ -3,7 +3,7 @@
 /* *********************************************************************
 Function Name: RollAll
 Purpose: Rolls all unlocked dice for the player
-Parameters: 
+Parameters:
             dice, a reference to the dice set to be rerolled
 Return Value: a vector of the newly generated dice face values
 Algorithm:
@@ -12,8 +12,8 @@ Algorithm:
     3) Otherwise, uses automatic reroll function
 Reference: none
 ********************************************************************* */
-vector<int> Player::RollAll(Dice& dice) 
-{ 
+vector<int> Player::RollAll(Dice& dice)
+{
     // Manual input option
     cout << "Would you like to manually input this dice roll? (y/n)" << endl;
     if (Input::ValidateYesNo())
@@ -24,11 +24,19 @@ vector<int> Player::RollAll(Dice& dice)
 
         // Validate user input use it to manually reroll
         cout << "Input the result of your roll." << endl;
-        vector<int> inputDice = Input::ValidateIntList({1,2,3,4,5,6}, "dice faces", numToRoll);
+        vector<int> inputDice;
+        if (numToRoll > 1)
+        {
+            inputDice = Input::ValidateIntList({1, 2, 3, 4, 5, 6}, "dice faces", numToRoll);
+        }
+        else
+        {
+            inputDice.push_back(Input::ValidateInt({1, 2, 3, 4, 5, 6}, "dice face"));
+        }
         dice.ManualRoll(inputDice);
         return inputDice;
     }
 
     // Automatically reroll dice that are unlocked
-    return dice.RollAll(); 
+    return dice.RollAll();
 };
