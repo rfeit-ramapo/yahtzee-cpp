@@ -1,15 +1,15 @@
-Round: 4
+Round: 3
 
 Scorecard:
-4 Human 1
-4 Computer 1
-6 Computer 3
-0
-0
-6 Human 3
-0
-29 Human 2
-25 Computer 2
 0
 0
 0
+0
+0
+12 Computer 2
+22 Computer 1
+0
+0
+30 Human 1
+0
+50 Human 2

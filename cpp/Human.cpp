@@ -173,6 +173,10 @@ void Human::ChooseCategory
          "score"
     );
 
+    // Validate round
+    cout << "Please input the current round." << endl;
+    Input::ValidateInt({a_round}, "round");
+
     // Fill the scorecard with player, round, and points info
     cout << "Please press enter to fill the scorecard." << endl;
     cin.get();
