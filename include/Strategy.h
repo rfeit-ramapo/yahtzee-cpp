@@ -59,9 +59,9 @@ public:
     bool operator <(const Strategy& s) const { return (m_maxScore < s.m_maxScore); }
     bool operator ==(const Strategy& s) const { return (m_maxScore == s.m_maxScore); }
     bool operator >(const Strategy& s) const { return (m_maxScore > s.m_maxScore); }
-    bool operator <=(const Strategy& s) const { return (*this <= s); }
-    bool operator >=(const Strategy& s) const { return (*this >= s); }
-    bool operator !=(const Strategy& s) const { return !(*this == s); }
+    bool operator <=(const Strategy& s) const { return (m_maxScore <= s.m_maxScore); }
+    bool operator >=(const Strategy& s) const { return (m_maxScore >= s.m_maxScore); }
+    bool operator !=(const Strategy& s) const { return !(m_maxScore != s.m_maxScore); }
 
     // Functions
 

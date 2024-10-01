@@ -63,7 +63,7 @@ Strategy StrategyEngine::Strategize(shared_ptr<const Dice> a_dice) const
         const Strategy& testStrategy = category->GetRerollStrategy(a_dice);
 
         // Update the best strategy based on the score
-        if (strategy < testStrategy) 
+        if (strategy <= testStrategy) 
         {
             strategy = testStrategy;
         }
