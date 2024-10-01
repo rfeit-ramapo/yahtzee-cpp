@@ -50,7 +50,12 @@ string Strategy::GetString(bool suggest) const
     {
         if (suggest)
         {
-            stratString = "I recommend that you try for the " + m_categoryName + " category with " + PrintDice(m_targetDice) + " because it gives the maximum possible points (" + to_string(m_maxScore) + ") among all the options. Therefore, " + PrintDice(m_rerollCounts) + " should be rerolled.\n";
+            stratString = "I recommend that you try for the " + m_categoryName + " category ";
+            if (accumulate(m_targetDice.begin(), m_targetDice.end(), 0))
+            {
+                stratString += "with " + PrintDice(m_targetDice);
+            } 
+            stratString += "because it gives the maximum possible points (" + to_string(m_maxScore) + ") among all the options. Therefore, " + PrintDice(m_rerollCounts) +" should be rerolled.\n";
             if (m_currentScore == 0)
             {
                 stratString += "However, depending on dice rolls you may not be able to score in this category, so be cautious!\n";
@@ -62,7 +67,12 @@ string Strategy::GetString(bool suggest) const
         }
         else
         {
-            stratString = "The computer plans to reroll to try for the " + m_categoryName + " category with " + PrintDice(m_targetDice) + " because it gives the maximum possible points (" + to_string(m_maxScore) + ") among all the options. Therefore, " + PrintDice(m_rerollCounts) + " will be rerolled.\n";
+            stratString = "The computer plans to you try for the " + m_categoryName + " category ";
+            if (accumulate(m_targetDice.begin(), m_targetDice.end(), 0))
+            {
+                stratString += "with " + PrintDice(m_targetDice);
+            } 
+            stratString += "because it gives the maximum possible points (" + to_string(m_maxScore) + ") among all the options. Therefore, " + PrintDice(m_rerollCounts) + "will be rerolled.\n";
             if (m_currentScore != 0)
             {
                 stratString += "At minimum, the computer will score " + to_string(m_currentScore) + " points in this category.\n";
@@ -169,7 +179,7 @@ string Strategy::PrintDice(vector<int> a_diceValues) const
             {
                 // Don't print 'and' if there was only one type of die
                 if (multipleFaces) fullString += "and ";
-                fullString += to_string(count) + " " + valueString;
+                fullString += to_string(count) + " " + valueString + " ";
                 return fullString;
             }
             
