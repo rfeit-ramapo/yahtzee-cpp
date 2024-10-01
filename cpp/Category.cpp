@@ -344,6 +344,10 @@ Strategy FullHouseCategory::GetRerollStrategy(shared_ptr<const Dice> a_dice) con
 
     // Check which mode values to use.
 
+    // If the mode does not have at least 2 values, remove it
+    if (maxCount1 == 1) mode1 = -1;
+    if (maxCount2 == 1) mode2 = -1;
+
     if (lockedMode1 >= 0)
     {
         // If there are two locked faces, you must use those.
@@ -368,8 +372,8 @@ Strategy FullHouseCategory::GetRerollStrategy(shared_ptr<const Dice> a_dice) con
 
     // Ideal dice will always be 3 of mode1 and 2 of mode2.
     vector<int> idealDice(6, 0);
-    idealDice[mode1] = 3;
-    idealDice[mode2] = 2;
+    if (mode1 >= 0) idealDice[mode1] = 3;
+    if (mode2 >= 0) idealDice[mode2] = 2;
 
     // Return a strategy that rerolls all nonscoring dice.
     vector<int> toReroll = a_dice->GetUnlockedUnscored(idealDice);
