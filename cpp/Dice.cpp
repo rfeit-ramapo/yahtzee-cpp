@@ -146,7 +146,7 @@ void Dice::ManualRoll(vector<int> a_input)
     // Add to dice counts for every input face value
     for (int i = 0; i < a_input.size(); ++i)
     {
-        ++m_diceCount[m_diceList[i] - 1];
+        ++m_diceCount[a_input[i] - 1];
     }
 }
 
